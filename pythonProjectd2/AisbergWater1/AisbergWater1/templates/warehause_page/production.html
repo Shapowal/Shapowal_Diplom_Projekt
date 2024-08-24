@@ -1,0 +1,44 @@
+{% extends 'page_web/base.html' %}
+
+{% block title %}Производство{% endblock %}
+
+{% block content %}
+<style>
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .button-group .btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #74ebd5;
+        border: 2px solid #333; /* Добавляем рамку */
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center; /* Центрирование текста */
+        text-decoration: none; /* Удаление подчеркивания у ссылок */
+        display: block; /* Убедиться, что ссылка ведет себя как блок */
+        margin: 10px 0; /* Добавить отступ между кнопками */
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .button-group .btn:hover {
+        background-color: #acb6e5;
+        border-color: #555; /* Изменение цвета рамки при наведении */
+    }
+</style>
+
+<div class="container mt-5">
+    <h1>Производство</h1>
+    <div class="button-group">
+        <a href="{% url 'production_main' %}" class="btn btn-primary">Производство</a>
+        <a href="{% url 'warehouse' %}" class="btn btn-primary">Склад</a>
+        <a href="{% url 'finished_goods_warehouse' %}" class="btn btn-primary">Склад готовой продукции</a>
+    </div>
+</div>
+{% endblock %}

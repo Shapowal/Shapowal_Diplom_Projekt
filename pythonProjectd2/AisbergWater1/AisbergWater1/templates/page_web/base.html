@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Aisberg Water{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+    <!-- Шапка сайта -->
+    <header class="navbar">
+        <nav>
+            <a href="{% url 'home' %}" class="navbar-brand">Aisberg Water</a>
+            <ul class="navbar-nav">
+                <li><a href="{% url 'home' %}">Главная</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        <!-- Блок для отображения сообщений -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Основной контент страницы -->
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+
+</html>

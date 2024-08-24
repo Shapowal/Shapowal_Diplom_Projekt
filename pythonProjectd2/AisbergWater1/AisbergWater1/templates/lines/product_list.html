@@ -1,0 +1,49 @@
+{% extends 'page_web/base.html' %}
+
+{% block title %}Список продуктов и линий{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Список продуктов</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>GTIN</th>
+                <th>Объем</th>
+                <th>Линия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.gtin }}</td>
+                <td>{{ product.volume }}</td>
+                <td>{{ product.line.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Список линий</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название линии</th>
+                <th>Объем</th>
+                <th>Номер линии</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for line in lines %}
+            <tr>
+                <td>{{ line.name }}</td>
+                <td>{{ line.volume }}</td>
+                <td>{{ line.number }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
