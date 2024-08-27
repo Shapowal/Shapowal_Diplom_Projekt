@@ -15,7 +15,11 @@ def register(request):
         if form.is_valid():
             user = form.save()  # Сохраняем нового пользователя
             login(request, user)  # Входим в систему
+            messages.success(request, 'Регистрация прошла успешно!')
             return redirect('production')  # Перенаправляем на страницу производства
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки ниже.')
+            print(form.errors)  # Для отладки
     else:
         form = CustomUserCreationForm()  # Пустая форма для GET-запросов
 
@@ -122,7 +126,7 @@ def product_list(request):
     lines = Line.objects.all()  # Получаем все линии
     return render(request, 'lines/product_list.html', {'products': products, 'lines': lines})
 
-# Создание новой партии
+
 def create_batch(request):
     """Создание новой партии продукции"""
     if request.method == 'POST':
@@ -132,6 +136,14 @@ def create_batch(request):
         if form.is_valid():
             batch = form.save(commit=False)  # Создаем партию без сохранения
             batch.is_used = False  # Устанавливаем значение по умолчанию
+
+            # Получаем номер последней партии для данной линии
+            last_batch = Batch.objects.filter(line_id=line_id).order_by('-number').first()
+            if last_batch:
+                batch.number = last_batch.number + 1
+            else:
+                batch.number = 1  # Начинаем с 1, если нет предыдущих партий
+
             batch.save()  # Сохраняем партию
             messages.success(request, 'Партия успешно создана!')  # Сообщение об успехе
             return redirect('batch_list')  # Перенаправляем на список партий
@@ -145,7 +157,6 @@ def create_batch(request):
 
     lines = Line.objects.all()  # Получаем все линии
     return render(request, 'lines/create_batch.html', {'form': form, 'lines': lines, 'selected_line_id': line_id})
-
 # Список всех партий с фильтрацией по дате
 def batch_list(request):
     """Список всех партий с возможностью фильтрации по дате и продукту"""
