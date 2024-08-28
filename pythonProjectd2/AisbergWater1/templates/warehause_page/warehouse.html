@@ -1,0 +1,48 @@
+{% extends 'page_web/base.html' %}
+
+{% block title %}Склад{% endblock %}
+
+{% block content %}
+<style>
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .button-group .btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #74ebd5;
+        border: 2px solid #333; /* Добавляем рамку */
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        text-align: center; /* Центрирование текста */
+        text-decoration: none; /* Удаление подчеркивания у ссылок */
+        display: block; /* Убедиться, что ссылка ведет себя как блок */
+        margin: 10px 0; /* Добавить отступ между кнопками */
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .button-group .btn:hover {
+        background-color: #acb6e5;
+        border-color: #555; /* Изменение цвета рамки при наведении */
+    }
+</style>
+
+<div class="container mt-5">
+    <h1>Склад</h1>
+    <div class="button-group">
+        <a href="{% url 'create_material' %}" class="btn btn-primary">Создать материал</a>
+        <a href="{% url 'material_list' %}" class="btn btn-primary">Список материалов</a>
+        <a href="{% url 'create_product_material' %}" class="btn btn-primary">Добавить состав к продукту</a>
+        <a href="{% url 'product_material_list' %}" class="btn btn-primary">Список составов продуктов</a>
+        <a href="{% url 'release_products' %}" class="btn btn-primary">Выпуск продукции</a>
+        <a href="{% url 'view_stock' %}" class="btn btn-primary">Остатки материалов</a>
+        <a href="{% url 'view_and_edit_stock' %}" class="btn btn-primary">Просмотр и редактирование остатков</a> <!-- Новая ссылка -->
+    </div>
+</div>
+{% endblock %}

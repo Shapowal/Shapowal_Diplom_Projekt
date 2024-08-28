@@ -1,0 +1,31 @@
+{% extends 'page_web/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Склад готовой продукции</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Продукт</th>
+                <th>Дата производства</th>
+                <th>Количество</th>
+                <th>Номер партии</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in stock %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.production_date|date:"d.m.Y" }}</td> <!-- Отображение даты в формате дд.мм.гггг -->
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.batch_number }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">Нет данных</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
