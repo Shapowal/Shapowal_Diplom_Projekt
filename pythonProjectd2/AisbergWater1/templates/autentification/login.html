@@ -6,20 +6,35 @@
 <div class="container">
     <div class="login-form">
         <h1>Вход</h1>
+
+        <!-- Блок для отображения сообщений об ошибках -->
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+        {% endif %}
+
         <form method="post" class="form-group">
             {% csrf_token %}
+
+            <!-- Поле для имени пользователя -->
             <div class="form-group">
                 <label for="username">Имя пользователя:</label>
                 <input type="text" name="username" id="username" required class="form-control">
             </div>
+
+            <!-- Поле для пароля -->
             <div class="form-group">
                 <label for="password">Пароль:</label>
                 <input type="password" name="password" id="password" required class="form-control">
             </div>
+
+            <!-- Поле для чекбокса "Запомнить меня" -->
             <div class="form-group form-check">
                 <input type="checkbox" name="remember" id="remember" class="form-check-input">
                 <label for="remember" class="form-check-label">Запомнить меня</label>
             </div>
+
             <button type="submit" class="btn btn-primary">Войти</button>
         </form>
     </div>
