@@ -1,0 +1,14 @@
+{% extends 'page_web/base.html' %}
+
+{% block title %}Добавить состав к продукту{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Добавить состав к продукту</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Добавить</button>
+    </form>
+</div>
+{% endblock %}

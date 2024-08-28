@@ -1,0 +1,30 @@
+{% extends 'page_web/base.html' %}
+
+{% block title %}Остатки на складе{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Остатки на складе</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Материал</th>
+                <th>Количество</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in stocks %}
+                <tr>
+                    <td>{{ stock.material.name }}</td>
+                    <td>{{ stock.quantity }} {{ stock.material.get_unit_display }}</td>
+                    <td>
+                        <a href="{% url 'edit_stock' stock.id %}" class="btn btn-warning">Редактировать</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'add_stock' %}" class="btn btn-primary">Добавить остаток</a>
+</div>
+{% endblock %}

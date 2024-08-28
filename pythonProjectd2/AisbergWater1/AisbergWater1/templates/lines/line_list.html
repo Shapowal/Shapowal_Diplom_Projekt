@@ -1,0 +1,32 @@
+{% extends "page_web/base.html" %}
+
+{% block title %}Список Линий{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>Список Линий</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Объем</th>
+                    <th>Номер линии</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for line in object_list %}
+                    <tr>
+                        <td>{{ line.name }}</td>
+                        <td>{{ line.volume }}</td>
+                        <td>{{ line.number }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">Нет данных для отображения</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'create_line' %}" class="btn">Создать Новую Линию</a>
+    </div>
+{% endblock %}
