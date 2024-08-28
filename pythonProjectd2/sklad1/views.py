@@ -7,44 +7,51 @@ from django.views.generic import ListView
 from .forms import *
 from .models import *
 
-# Регистрация нового пользователя и автоматический вход в систему
+# Регистрация нового пользователя
 def register(request):
-    """Обрабатывает регистрацию нового пользователя и автоматический вход в систему."""
+    """Регистрация нового пользователя и автоматический вход в систему"""
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('production')
+            user = form.save()  # Сохраняем нового пользователя
+            login(request, user)  # Входим в систему
+            messages.success(request, 'Регистрация прошла успешно!')
+            return redirect('production')  # Перенаправляем на страницу производства
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки ниже.')
+            print(form.errors)  # Для отладки
     else:
-        form = CustomUserCreationForm()
-    role_choices = CustomUser.ROLE_CHOICES
+        form = CustomUserCreationForm()  # Пустая форма для GET-запросов
+
+    role_choices = CustomUser.ROLE_CHOICES  # Получаем варианты ролей для выбора
     return render(request, 'autentification/register.html', {'form': form, 'role_choices': role_choices})
 
 # Вход пользователя в систему
 def login_view(request):
-    """Обрабатывает вход пользователя в систему и работу с опцией 'Запомнить меня'."""
-    error = None
+    """Страница входа пользователя в систему"""
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        remember_me = request.POST.get('remember')  # Получение значения чекбокса
+        remember_me = request.POST.get('remember')  # Получаем значение чекбокса "Запомнить меня"
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)  # Проверяем учетные данные
         if user is not None:
-            login(request, user)
+            login(request, user)  # Входим в систему
 
-            # Установка времени жизни сессии в зависимости от чекбокса 'Запомнить меня'
+            # Устанавливаем время жизни сессии в зависимости от чекбокса "Запомнить меня"
             if remember_me:
                 request.session.set_expiry(1209600)  # 2 недели в секундах
             else:
                 request.session.set_expiry(0)  # До закрытия браузера
 
-            return redirect('production')
+            return redirect('production')  # Перенаправляем на страницу производства
         else:
+            # Передаем ошибку в контексте
             error = 'Неправильное имя пользователя или пароль'
+            return render(request, 'autentification/login.html', {'error': error})
 
-    return render(request, 'autentification/login.html', {'error': error})
+    return render(request, 'autentification/login.html')
+
 
 # Главная страница
 def home(request):
