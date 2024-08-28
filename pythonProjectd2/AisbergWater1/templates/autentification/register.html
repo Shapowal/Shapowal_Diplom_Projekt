@@ -8,27 +8,58 @@
         <h1>Регистрация</h1>
         <form method="post" class="form-group">
             {% csrf_token %}
-            {{ form.non_field_errors }}
+
+            <!-- Общие ошибки формы -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Поле для имени пользователя -->
             <div class="form-group">
                 <label for="{{ form.username.id_for_label }}">Имя пользователя:</label>
                 {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="alert alert-danger">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- Поле для пароля -->
             <div class="form-group">
                 <label for="{{ form.password1.id_for_label }}">Пароль:</label>
                 {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div class="alert alert-danger">
+                        {{ form.password1.errors }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- Поле для подтверждения пароля -->
             <div class="form-group">
                 <label for="{{ form.password2.id_for_label }}">Подтверждение пароля:</label>
                 {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="alert alert-danger">
+                        {{ form.password2.errors }}
+                    </div>
+                {% endif %}
             </div>
+
+            <!-- Поле для выбора роли -->
             <div class="form-group">
                 <label for="{{ form.role.id_for_label }}">Роль:</label>
-                <select name="{{ form.role.name }}" id="{{ form.role.id_for_label }}" required>
-                    {% for value, label in role_choices %}
-                        <option value="{{ value }}">{{ label }}</option>
-                    {% endfor %}
-                </select>
+                {{ form.role }}
+                {% if form.role.errors %}
+                    <div class="alert alert-danger">
+                        {{ form.role.errors }}
+                    </div>
+                {% endif %}
             </div>
+
             <button type="submit" class="btn btn-primary">Регистрация</button>
         </form>
     </div>
