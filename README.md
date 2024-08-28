@@ -49,6 +49,7 @@
 
 5. **Применение миграций**
     ```bash
+   python manage.py makemigrations
    python manage.py migrate
 
 6. **Создание суперпользователя**
