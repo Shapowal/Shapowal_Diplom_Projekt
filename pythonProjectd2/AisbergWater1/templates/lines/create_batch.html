@@ -1,0 +1,34 @@
+{% extends 'page_web/base.html' %}
+
+{% block content %}
+<div class="main-container">
+    <div class="container">
+        <h1>Create New Batch</h1>
+
+        {% if not request.GET.line %}
+            <!-- Форма для выбора линии -->
+            <form method="get" action="{% url 'create_batch' %}">
+                <div class="form-group">
+                    <label for="line">Выбрать линию</label>
+                    <select name="line" id="line" class="form-control" onchange="this.form.submit()">
+                        <option value="">Выберите линию</option>
+                        {% for line in lines %}
+                            <option value="{{ line.id }}" {% if selected_line_id == line.id|stringformat:"s" %}selected{% endif %}>
+                                {{ line.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        {% else %}
+            <!-- Форма для создания партии -->
+            <form method="post" action="{% url 'create_batch' %}">
+                {% csrf_token %}
+                <input type="hidden" name="line" value="{{ selected_line_id }}">
+                {{ form.as_p }}
+                <button type="submit" class="btn">Create Batch</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

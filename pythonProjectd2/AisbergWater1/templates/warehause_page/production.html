@@ -1,0 +1,15 @@
+{% extends 'page_web/base.html' %}
+
+{% block title %}Производство{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h1>Производство</h1>
+    <div class="button-group">
+        <a href="{% url 'production_main' %}" class="btn btn-primary">Производство</a>
+        <a href="{% url 'warehouse' %}" class="btn btn-primary">Склад</a>
+        <a href="{% url 'finished_goods_warehouse' %}" class="btn btn-primary">Склад готовой продукции</a>
+    </div>
+</div>
+{% endblock %}

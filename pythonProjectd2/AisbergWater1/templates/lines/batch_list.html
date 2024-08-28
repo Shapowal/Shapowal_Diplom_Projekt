@@ -1,0 +1,99 @@
+{% extends 'page_web/base.html' %}
+
+{% block content %}
+<div class="main-container">
+    <div class="container">
+        <h1>Список партий</h1>
+
+        <!-- Форма для фильтрации по датам и продуктам -->
+        <form method="get" class="form-inline mb-3">
+            <div class="form-group">
+                <label for="start_date">Дата начала:</label>
+                <input type="date" id="start_date" name="start_date" class="form-control ml-2" value="{{ request.GET.start_date }}">
+            </div>
+            <div class="form-group ml-3">
+                <label for="end_date">Дата окончания:</label>
+                <input type="date" id="end_date" name="end_date" class="form-control ml-2" value="{{ request.GET.end_date }}">
+            </div>
+            <div class="form-group ml-3">
+                <label for="product_id">Продукт:</label>
+                <select id="product_id" name="product_id" class="form-control ml-2">
+                    <option value="">Все продукты</option>
+                    {% for product in products %}
+                    <option value="{{ product.id }}" {% if request.GET.product_id == product.id|stringformat:"s" %}selected{% endif %}>{{ product.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary ml-3">Применить</button>
+            <a href="{% url 'batch_list' %}" class="btn btn-secondary ml-3">Сбросить</a>
+        </form>
+
+        <!-- Кнопка печати -->
+        <button onclick="printTable()" class="btn btn-info mb-3">Печать</button>
+
+        <!-- Таблица с данными -->
+        <div class="printable-area">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Номер партии</th>
+                        <th>Продукт</th>
+                        <th>Линия</th>
+                        <th>Количество</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for batch in batches %}
+                    <tr>
+                        <td>{{ batch.batch_number }}</td>
+                        <td>{{ batch.product.name }}</td>
+                        <td>{{ batch.line.name }}</td>
+                        <td>{{ batch.quantity }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">Партии не найдены.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    function printTable() {
+        // Открываем новое окно для печати
+        var printWindow = window.open('', '', 'height=600,width=800');
+
+        // Стиль для печати
+        printWindow.document.write('<html><head><title>Печать списка партий</title>');
+        printWindow.document.write('<style>body { font-family: Arial, sans-serif; margin: 20px; } table { width: 100%; border-collapse: collapse; } table th, table td { border: 1px solid black; padding: 8px; text-align: left; } tfoot { font-weight: bold; }</style>');
+        printWindow.document.write('</head><body>');
+
+        // Клонируем таблицу
+        var tableHTML = document.querySelector('.printable-area').innerHTML;
+
+        // Расчёт итогового количества
+        var totalQuantity = 0;
+        document.querySelectorAll('tbody tr').forEach(row => {
+            var quantityCell = row.querySelector('td:nth-child(4)');
+            if (quantityCell) {
+                var quantity = parseFloat(quantityCell.textContent.replace(',', '.')) || 0;
+                totalQuantity += quantity;
+            }
+        });
+
+        // Записываем таблицу в окно печати с итоговым количеством
+        printWindow.document.write('<table class="table table-bordered">');
+        printWindow.document.write(tableHTML); // Вставляем исходную таблицу
+        printWindow.document.write('<tfoot><tr><td colspan="3" class="text-right">Итоговое количество:</td><td>' + totalQuantity.toFixed(2) + '</td></tr></tfoot>');
+        printWindow.document.write('</table>');
+        printWindow.document.write('</body></html>');
+
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+    }
+</script>
+{% endblock %}
