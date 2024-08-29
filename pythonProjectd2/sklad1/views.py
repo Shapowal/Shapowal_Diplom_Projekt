@@ -47,10 +47,12 @@ def login_view(request):
             return redirect('production')  # Перенаправляем на страницу производства
         else:
             # Передаем ошибку в контексте
-            error = 'Неправильное имя пользователя или пароль'
-            return render(request, 'autentification/login.html', {'error': error})
+            messages.success(request, 'Проверьте правильность ввода ')
+            return render(request, 'autentification/login.html')
 
     return render(request, 'autentification/login.html')
+
+
 # Главная страница
 def home(request):
     """Отображает главную страницу."""
