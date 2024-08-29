@@ -154,26 +154,12 @@ def product_list(request):
 # Создание новой партии
 @login_required
 def create_batch(request):
-    """Обрабатывает создание новой партии продукции."""
     if request.method == 'POST':
         line_id = request.POST.get('line')
         form = BatchForm(request.POST, line_id=line_id)
 
         if form.is_valid():
-            batch = form.save(commit=False)
-            batch.is_used = False  # Устанавливаем значение по умолчанию
-
-            # Определение следующего номера партии
-            existing_batches = Batch.objects.filter(line_id=line_id).order_by('-number')
-            if existing_batches.exists():
-                # Если есть существующие партии, получаем максимальный номер и увеличиваем его на 1
-                next_number = existing_batches.first().number + 1
-            else:
-                # Если нет существующих партий, начинаем с 1
-                next_number = 1
-            batch.number = next_number
-
-            batch.save()
+            form.save()
             messages.success(request, 'Партия успешно создана!')
             return redirect('batch_list')
         else:
@@ -186,6 +172,7 @@ def create_batch(request):
 
     lines = Line.objects.all()
     return render(request, 'lines/create_batch.html', {'form': form, 'lines': lines, 'selected_line_id': line_id})
+
 
 
 # Список всех партий с фильтрацией по дате
