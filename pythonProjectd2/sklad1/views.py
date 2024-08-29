@@ -117,7 +117,6 @@ def create_line(request):
 
 
 # Список всех линий
-@login_required
 class LineListView(ListView):
     """Отображает список всех производственных линий."""
     model = Line
